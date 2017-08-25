@@ -11,4 +11,9 @@ import scrapy
 class PythonItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    code = scrapy.Field()
+    name = scrapy.Field()
+    date = scrapy.Field()
+    value = scrapy.Field()
+    total = scrapy.Field()
+
