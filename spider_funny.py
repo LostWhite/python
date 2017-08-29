@@ -22,20 +22,19 @@ def getItem(items, localPath, baseUrl):  # 获取item
             savePath = localPath + item.find('b').string
             if not os.path.exists(savePath):
                 os.mkdir(savePath)
-            getImg(baseUrl + item.find('h3').find('a')['href'], savePath, baseUrl)
-    return 'fin'
+            getImg(baseUrl + item.find('h3').find('a')['href'], savePath)
 
 
-def getImg(url, savePath, baseUrl):  # 下载图片
+def getImg(url, savePath):  # 下载图片
     page = getHtmlCode(url)
     soup = BeautifulSoup(page, 'html.parser')
     imgList = soup.find('div', class_='page').find_all("li")
+    saveImg(url,savePath)
     for img in imgList[3:len(imgList) - 1]:
         if img.find('a') != '':
             imgUrl = img.find('a')['href']
             front = os.path.split(url)
             imgUrl = front[0] + "/" + imgUrl
-            print(imgUrl)
             saveImg(imgUrl, savePath)
 
 
@@ -46,6 +45,7 @@ def saveImg(imgUrl, savePath):
     finUrl = baseUrl + soup.find('div', class_='text').find('img')['src']
     p = soup.find('div', class_='text').find_all('p')[2]
     fileName = p.string.replace('\r', '').replace('\n', '').replace('\t', '')
+    print(fileName)
     urllib.request.urlretrieve(finUrl, savePath + '/' + '%s.jpg' % fileName)
 
 
@@ -56,5 +56,4 @@ if __name__ == '__main__':
     page = getHtmlCode(url)
     soup = BeautifulSoup(page, 'html.parser')
     pageItems = soup.find('div', class_='main').find_all('div', class_='item')
-    print(pageItems)
     getItem(pageItems, localPath, baseUrl)
